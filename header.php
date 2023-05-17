@@ -39,6 +39,13 @@
                     if(get_post_type() == 'post') echo 'class="current-menu-item"'?>
                     ><a href="<?php echo site_url('/blog')?>">Blog</a>
                   </li>
+
+                   <li 
+                    <?php 
+                    if(get_post_type() == 'contact-us') echo 'class="current-menu-item"'?>>
+                    <a href="<?php echo site_url('/contact-us')?>">Contact Us</a>
+                  </li>
+
                 </ul>
               </nav>
           <div class="site-header__util">

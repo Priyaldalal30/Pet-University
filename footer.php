@@ -18,6 +18,8 @@
                   <li><a href="<?php echo site_url('/programs')?>">Programs</a></li>
                   <li><a href="<?php echo site_url('/event')?>">Events</a></li>
                   <li><a href="<?php echo site_url('/blog')?>">Blog</a></li>
+                  <li><a href="<?php echo site_url('/contact-us')?>">Contact Us</a></li>
+
                 </ul>
               </nav>
             </div>
