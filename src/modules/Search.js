@@ -3,6 +3,7 @@ import $ from "jquery";
 class Search {
   //1. describe/create object
   constructor() {
+    this.addSearchHTML();
     this.searchButton = $(".js-search-trigger");
     this.closeButton = $(".search-overlay__close");
     this.searchOverlay = $(".search-overlay");
@@ -26,6 +27,7 @@ class Search {
   openOverlay() {
     this.searchOverlay.addClass("search-overlay--active");
     $("body").addClass("body-no-scroll");
+    setTimeout(() => this.searchField.focus(), 301);
   }
 
   closeoverlay() {
@@ -47,7 +49,7 @@ class Search {
           this.searchResult.html('<div class="spinner-loader"></div>');
           this.SpinnerVisibility = true;
         }
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 300);
       } else {
         this.searchResult.html(" ");
         this.SpinnerVisibility = false;
@@ -82,6 +84,23 @@ class Search {
         this.SpinnerVisibility = false;
       }
     );
+  }
+
+  addSearchHTML() {
+    $("body").append(`
+        <div class="search-overlay">
+            <div class="search-overlay__top">
+                <div class="container">
+                    <i class="fa fa-search search-overlay__icon" aria-hidden="true"></i>
+                    <input type="text" class="search-term" placeholder="Type here" id="search-term">
+                    <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="container">
+                <div id="search-overlay__results"></div>
+            </div>
+        </div>
+    `);
   }
 }
 
