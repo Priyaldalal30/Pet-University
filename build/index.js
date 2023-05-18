@@ -116,6 +116,11 @@ class Search {
     this.searchButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
     this.searchOverlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay");
+    this.searchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-term");
+    this.searchResult = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-overlay__results");
+    this.typingTimer;
+    this.SpinnerVisibility = false;
+    this.previousValue;
     this.events();
   }
 
@@ -124,6 +129,7 @@ class Search {
     this.searchButton.on("click", this.openOverlay.bind(this));
     this.closeButton.on("click", this.closeoverlay.bind(this));
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("keyup", this.escKey.bind(this));
+    this.searchField.on("keyup", this.searchType.bind(this));
   }
 
   //3. function/action
@@ -140,6 +146,23 @@ class Search {
       this.closeoverlay();
     }
   }
+  searchType() {
+    if (this.searchField.val() != this.previousValue) {
+      clearTimeout(this.typingTimer);
+      if (this.searchField.val()) {
+        if (!this.SpinnerVisibility) {
+          this.searchResult.html('<div class="spinner-loader"></div>');
+          this.SpinnerVisibility = true;
+        }
+        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+      } else {
+        this.searchResult.html(" ");
+        this.SpinnerVisibility = false;
+      }
+    }
+    this.previousValue = this.searchField.val();
+  }
+  getResults() {}
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Search);
 
