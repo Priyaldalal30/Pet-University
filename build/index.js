@@ -137,6 +137,7 @@ class Search {
   openOverlay() {
     this.searchOverlay.addClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").addClass("body-no-scroll");
+    this.searchField.val("");
     setTimeout(() => this.searchField.focus(), 301);
   }
   closeoverlay() {
@@ -166,14 +167,17 @@ class Search {
   }
   getResults() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(univeristyData.root_url + "/wp-json/wp/v2/posts?search=" + this.searchField.val(), posts => {
-      this.searchResult.html(`
+      jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(univeristyData.root_url + "/wp-json/wp/v2/pages?search=" + this.searchField.val(), pages => {
+        var combinedResults = posts.concat(pages);
+        this.searchResult.html(`
             <h2 class="search-pverlay__section-title">Search Results:</h2>
-            ${posts.length ? '<ul class="link-list min-list">' : "<p>No posts found</p>"}
-                ${posts.map(item => `<li><a href="${item.link}">${item.title.rendered}</a></li>`).join("")}
-                  ${posts.length ? "</ul>" : ""}
+            ${combinedResults.length ? '<ul class="link-list min-list">' : "<p>No posts found</p>"}
+                ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a></li>`).join("")}
+                  ${combinedResults.length ? "</ul>" : ""}
 
         `);
-      this.SpinnerVisibility = false;
+        this.SpinnerVisibility = false;
+      });
     });
   }
   addSearchHTML() {
