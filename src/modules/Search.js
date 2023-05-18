@@ -61,18 +61,21 @@ class Search {
   }
 
   getResults() {
-    $.getJSON(
-      univeristyData.root_url +
-        "/wp-json/wp/v2/posts?search=" +
-        this.searchField.val(),
-      (posts) => {
-        $.getJSON(
-          univeristyData.root_url +
-            "/wp-json/wp/v2/pages?search=" +
-            this.searchField.val(),
-          (pages) => {
-            var combinedResults = posts.concat(pages);
-            this.searchResult.html(`
+    $.when(
+      $.getJSON(
+        univeristyData.root_url +
+          "/wp-json/wp/v2/posts?search=" +
+          this.searchField.val()
+      ),
+      $.getJSON(
+        univeristyData.root_url +
+          "/wp-json/wp/v2/pages?search=" +
+          this.searchField.val()
+      )
+    ).then(
+      (posts, pages) => {
+        var combinedResults = posts[0].concat(pages[0]);
+        this.searchResult.html(`
             <h2 class="search-pverlay__section-title">Search Results:</h2>
             ${
               combinedResults.length
@@ -88,9 +91,10 @@ class Search {
                   ${combinedResults.length ? "</ul>" : ""}
 
         `);
-            this.SpinnerVisibility = false;
-          }
-        );
+        this.SpinnerVisibility = false;
+      },
+      () => {
+        this.searchResult.html("<p>Unexpected Error. Please try again.</p>");
       }
     );
   }
