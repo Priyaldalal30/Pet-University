@@ -57,7 +57,32 @@ class Search {
     this.previousValue = this.searchField.val();
   }
 
-  getResults() {}
+  getResults() {
+    $.getJSON(
+      univeristyData.root_url +
+        "/wp-json/wp/v2/posts?search=" +
+        this.searchField.val(),
+      (posts) => {
+        this.searchResult.html(`
+            <h2 class="search-pverlay__section-title">Search Results:</h2>
+            ${
+              posts.length
+                ? '<ul class="link-list min-list">'
+                : "<p>No posts found</p>"
+            }
+                ${posts
+                  .map(
+                    (item) =>
+                      `<li><a href="${item.link}">${item.title.rendered}</a></li>`
+                  )
+                  .join("")}
+                  ${posts.length ? "</ul>" : ""}
+
+        `);
+        this.SpinnerVisibility = false;
+      }
+    );
+  }
 }
 
 export default Search;
