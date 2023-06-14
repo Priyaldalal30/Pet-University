@@ -171,7 +171,8 @@ class Search {
       this.searchResult.html(`
             <h2 class="search-pverlay__section-title">Search Results:</h2>
             ${combinedResults.length ? '<ul class="link-list min-list">' : "<p>No posts found</p>"}
-                ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a></li>`).join("")}
+                ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type == "post" ? `by ${item.authorName}` : ``}
+                      </li>`).join("")}
                   ${combinedResults.length ? "</ul>" : ""}
 
         `);
