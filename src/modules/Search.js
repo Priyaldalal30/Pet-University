@@ -61,42 +61,39 @@ class Search {
   }
 
   getResults() {
-    $.when(
-      $.getJSON(
-        univeristyData.root_url +
-          "/wp-json/wp/v2/posts?search=" +
-          this.searchField.val()
-      ),
-      $.getJSON(
-        univeristyData.root_url +
-          "/wp-json/wp/v2/pages?search=" +
-          this.searchField.val()
-      )
-    ).then(
-      (posts, pages) => {
-        var combinedResults = posts[0].concat(pages[0]);
-        this.searchResult.html(`
-            <h2 class="search-pverlay__section-title">Search Results:</h2>
-            ${
-              combinedResults.length
-                ? '<ul class="link-list min-list">'
-                : "<p>No posts found</p>"
-            }
-                ${combinedResults
+    $.getJSON(
+      univeristyData.root_url +
+        "/wp-json/university/v1/search?term=" +
+        this.searchField.val(),
+      (results) => {
+        this.resultsDiv.html(`
+        <div class="row"> 
+          <div class="one-third">
+            <h2 class="search-pverlay__section-title">General Information</h2>
+              ${
+                results.generalInfo.length
+                  ? '<ul class="link-list min-list">'
+                  : "<p>No posts found</p>"
+              }
+                ${results.generalInfo
                   .map(
-                    (item) => `<li><a href="${item.link}">${
-                      item.title.rendered
+                    (item) => `<li><a href="${item.permalink}">${
+                      item.title
                     }</a> ${item.type == "post" ? `by ${item.authorName}` : ``}
                       </li>`
                   )
                   .join("")}
-                  ${combinedResults.length ? "</ul>" : ""}
-
-        `);
-        this.SpinnerVisibility = false;
-      },
-      () => {
-        this.searchResult.html("<p>Unexpected Error. Please try again.</p>");
+                  ${results.generalInfo.length ? "</ul>" : ""}
+          </div>
+          <div class="one-third">
+            <h2 class="search-pverlay__section-title">Programs</h2>
+            <h2 class="search-pverlay__section-title">Professors</h2>
+          </div>
+          <div class="one-third">
+            <h2 class="search-pverlay__section-title">Events</h2>
+          </div>
+        </div>
+      `);
       }
     );
   }
